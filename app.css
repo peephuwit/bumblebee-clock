@@ -1,0 +1,764 @@
+/* obsidian dial, one warm pool of light, and brass */
+:root {
+  --ink-000: #040507;
+  --ink-100: #0c0e15;
+  --ink-200: #12151f;
+  --ink-300: #171b26;
+  --ink-400: #232a3b;
+  
+  --brass-100: #f6e6c1;
+  --brass-200: #ebd39f;
+  --brass-300: #deb464;
+  --brass-400: #c59746;
+  --brass-500: #b8873f;
+  --brass-700: #664316;
+  --brass-900: #331f08;
+
+  --silver-glow: rgba(220, 230, 245, 0.4);
+  --code-bg: #090c13;
+  --card-border: rgba(184, 135, 63, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--brass-100);
+  background-color: var(--ink-000);
+  padding: 1.5rem;
+}
+
+/* Background Atmospheric Radial Gradients (Brightened Luxury Timepiece Lighting) */
+.ambient {
+  background:
+    radial-gradient(65% 52% at 50% 44%, rgba(222, 180, 100, 0.26), transparent 72%),
+    radial-gradient(120% 90% at 50% 44%, var(--ink-200), var(--ink-000));
+  background-attachment: fixed;
+}
+
+/* Outer Window Frame / Timepiece Case Simulation */
+.window-frame {
+  width: 100%;
+  max-width: 580px;
+  background: rgba(16, 21, 32, 0.88);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(246, 230, 193, 0.25);
+  border-radius: 14px;
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.75),
+    0 0 50px rgba(214, 168, 78, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Window Header / Titlebar */
+.window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.25rem;
+  background: rgba(12, 16, 24, 0.9);
+  border-bottom: 1px solid rgba(214, 168, 78, 0.12);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+.window-controls {
+  display: flex;
+  gap: 7px;
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-red { background: #ff5f56; box-shadow: 0 0 6px rgba(255, 95, 86, 0.4); }
+.dot-yellow { background: #ffbd2e; box-shadow: 0 0 6px rgba(255, 189, 46, 0.4); }
+.dot-green { background: #27c93f; box-shadow: 0 0 6px rgba(39, 201, 63, 0.4); }
+
+.window-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+}
+
+.brand {
+  color: var(--brass-100);
+  font-weight: 600;
+}
+
+.separator {
+  color: rgba(246, 230, 193, 0.3);
+}
+
+.tech-tag {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.tech-tag.html { color: #f26284; }
+.tech-tag.css { color: #58a6ff; }
+.tech-tag.js { color: #f1e05a; }
+
+.window-endpoint {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.72rem;
+  color: rgba(246, 230, 193, 0.45);
+  display: flex;
+  align-items: center;
+}
+
+/* Luxury Haute Horlogerie Mechanical Sound Toggle Button */
+.sound-btn {
+  height: 28px;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, rgba(246, 230, 193, 0.12), rgba(196, 149, 64, 0.06));
+  border: 1px solid rgba(246, 230, 193, 0.32);
+  color: var(--brass-100);
+  font-family: 'Fira Code', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  padding: 0 11px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  line-height: 1;
+  transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+  letter-spacing: 0.08em;
+  user-select: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.sound-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #27c93f;
+  box-shadow: 0 0 8px #27c93f;
+  display: inline-block;
+  transition: all 0.25s ease;
+  animation: livePulse 2s ease-in-out infinite alternate;
+}
+
+.sound-btn:hover {
+  background: linear-gradient(135deg, rgba(246, 230, 193, 0.22), rgba(214, 168, 78, 0.14));
+  border-color: rgba(255, 213, 115, 0.8);
+  box-shadow: 0 4px 14px rgba(246, 230, 193, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.sound-btn:active {
+  transform: translateY(0);
+}
+
+.sound-btn.muted {
+  color: rgba(246, 230, 193, 0.45);
+  border-color: rgba(246, 230, 193, 0.15);
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow: none;
+  transform: none;
+}
+
+.sound-btn.muted .sound-status-dot {
+  background: rgba(246, 230, 193, 0.25);
+  box-shadow: none;
+  animation: none;
+}
+
+.window-frame.theme-obsidian-platinum .sound-btn {
+  background: linear-gradient(135deg, rgba(226, 232, 240, 0.12), rgba(148, 163, 184, 0.06));
+  border-color: rgba(226, 232, 240, 0.3);
+  color: #f1f5f9;
+}
+
+.window-frame.mode-blueprint .sound-btn {
+  background: rgba(0, 229, 255, 0.08);
+  border-color: rgba(0, 229, 255, 0.4);
+  color: #00f0ff;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+}
+
+.window-frame.mode-blueprint .sound-status-dot {
+  background: #00f0ff;
+  box-shadow: 0 0 8px #00f0ff;
+}
+
+/* Clock Stage */
+.clock-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.2rem 1.5rem 2rem 1.5rem;
+  overflow: hidden;
+}
+
+/* One thread of cold silver (Suspension wire) */
+.vline {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: 250px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(200, 220, 240, 0.85) 40%,
+    rgba(246, 230, 193, 0.4) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 8px var(--silver-glow);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Dial Branding Text */
+.dial-brand {
+  text-align: center;
+  z-index: 2;
+  margin-bottom: 1rem;
+}
+
+.brand-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.48em;
+  color: var(--brass-100);
+  text-shadow: 0 0 16px rgba(246, 230, 193, 0.35);
+  margin-bottom: 0.35rem;
+}
+
+.brand-sub {
+  font-size: 0.58rem;
+  letter-spacing: 0.28em;
+  color: rgba(222, 180, 100, 0.65);
+  text-transform: uppercase;
+}
+
+/* Dial Center Container */
+.dial-container {
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 1 / 1;
+  position: relative;
+  margin: 0 auto;
+  filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.8));
+}
+
+/* ==================================================== */
+/* LUXURY HOROLOGICAL WINDING CROWN (เม็ดมะยมปรับเวลา) */
+/* ==================================================== */
+.watch-crown-knob {
+  position: absolute;
+  top: 50%;
+  right: -13px;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 30px;
+  background: linear-gradient(to right, #7a5416 0%, #deb050 40%, #fff2c7 70%, #945914 100%);
+  border: 1px solid rgba(255, 235, 160, 0.65);
+  border-left: none;
+  border-radius: 0 5px 5px 0;
+  box-shadow: 3px 0 12px rgba(0, 0, 0, 0.75), 0 0 10px rgba(255, 213, 115, 0.35);
+  cursor: ns-resize;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  transition: filter 0.25s ease, box-shadow 0.25s ease;
+}
+
+.watch-crown-knob:hover {
+  filter: brightness(1.25);
+  box-shadow: 4px 0 18px rgba(255, 213, 115, 0.65);
+}
+
+.watch-crown-knob.active-winding {
+  filter: brightness(1.4);
+  box-shadow: 0 0 22px rgba(255, 213, 115, 0.95);
+  transform: translateY(-50%) scale(1.06);
+}
+
+.crown-fluting {
+  width: 100%;
+  height: 20px;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.45) 2px,
+    rgba(0, 0, 0, 0.45) 3.5px
+  );
+}
+
+.crown-jewel {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ff8080, #700505);
+  position: absolute;
+  right: 2px;
+  box-shadow: 0 0 5px rgba(255, 80, 80, 0.85);
+}
+
+.clock-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Gothic & Surrealist Numerals (Outer Orbit Ring) */
+.numeral {
+  font-family: 'Playfair Display', 'Cinzel', serif;
+  font-style: italic;
+  font-size: 27px;
+  font-weight: 700;
+  fill: url(#digit-gold);
+  dominant-baseline: central;
+  user-select: none;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.95));
+}
+
+.num-12 { font-size: 31px; }
+.num-3, .num-9 { font-size: 28px; }
+.num-6 { font-size: 29px; }
+
+/* Hand Transformations & Pivot Center */
+.hand-group {
+  transform-box: view-box;
+  transform-origin: 0px 0px;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* Footer Readout */
+.clock-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  z-index: 2;
+}
+
+.readout-time {
+  display: block;
+  font-family: 'Fira Code', monospace;
+  font-size: 1.15rem;
+  letter-spacing: 0.25em;
+  color: var(--brass-100);
+  text-shadow: 0 0 10px rgba(246, 230, 193, 0.4);
+  margin-bottom: 0.25rem;
+}
+
+.readout-date {
+  display: block;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  color: rgba(246, 230, 193, 0.82);
+  text-shadow: 0 0 8px rgba(246, 230, 193, 0.25);
+  margin-bottom: 0.45rem;
+  text-transform: uppercase;
+}
+
+.readout-badges {
+  font-size: 0.55rem;
+  letter-spacing: 0.22em;
+  color: rgba(222, 180, 100, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Luminous Wing Aura Radiant Halo (ออร่าแสงเรืองรองปีก) */
+.wing-aura-halo {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wingAuraBreathing 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes wingAuraBreathing {
+  0% {
+    opacity: 0.45;
+    filter: drop-shadow(0 0 3px rgba(255, 213, 115, 0.4));
+  }
+  50% {
+    opacity: 0.95;
+    filter: drop-shadow(0 0 8px rgba(255, 235, 160, 0.85));
+  }
+  100% {
+    opacity: 0.55;
+    filter: drop-shadow(0 0 4px rgba(255, 180, 50, 0.5));
+  }
+}
+
+/* ==================================================== */
+/* HAUTE HORLOGERIE CONFIGURATOR & BLUEPRINT TOOLBAR     */
+/* ==================================================== */
+.horology-toolbar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: auto;
+  margin-top: 1.35rem;
+  padding: 5px 6px;
+  background: rgba(12, 16, 24, 0.82);
+  border: 1px solid rgba(246, 230, 193, 0.20);
+  border-radius: 8px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.65), 0 0 15px rgba(246, 230, 193, 0.08);
+  box-sizing: border-box;
+  z-index: 2;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-selector-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(246, 230, 193, 0.22);
+  margin: 0 2px;
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+.theme-pill {
+  height: 28px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(246, 230, 193, 0.18);
+  border-radius: 6px;
+  color: rgba(246, 230, 193, 0.70);
+  font-family: 'Fira Code', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.theme-pill:hover {
+  background: rgba(246, 230, 193, 0.14);
+  border-color: rgba(246, 230, 193, 0.45);
+  color: var(--brass-100);
+}
+
+.theme-pill.active {
+  background: rgba(246, 230, 193, 0.18);
+  border-color: var(--brass-100);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(246, 230, 193, 0.25);
+}
+
+.pill-swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+
+.gold-swatch {
+  background: linear-gradient(135deg, #ffe082 0%, #d4af37 50%, #8a4f08 100%);
+}
+
+.platinum-swatch {
+  background: linear-gradient(135deg, #ffffff 0%, #94a3b8 50%, #334155 100%);
+}
+
+/* Live Real-Time Sync Control */
+.time-control-btn {
+  height: 28px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(246, 230, 193, 0.18);
+  border-radius: 6px;
+  color: rgba(246, 230, 193, 0.75);
+  font-family: 'Fira Code', monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.time-control-btn:hover {
+  background: rgba(246, 230, 193, 0.14);
+  border-color: rgba(246, 230, 193, 0.45);
+  color: var(--brass-100);
+}
+
+.time-control-btn.live-active {
+  border-color: rgba(74, 222, 128, 0.55);
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.08);
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.2);
+}
+
+.live-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px #4ade80;
+  animation: livePulse 1.8s infinite alternate ease-in-out;
+}
+
+@keyframes livePulse {
+  0% { opacity: 0.4; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1.15); box-shadow: 0 0 9px #4ade80; }
+}
+
+/* CAD Blueprint Toggle Button */
+.blueprint-btn {
+  height: 28px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 10px;
+  background: rgba(0, 229, 255, 0.06);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  border-radius: 6px;
+  color: #00f0ff;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
+}
+
+.blueprint-btn:hover {
+  background: rgba(0, 229, 255, 0.16);
+  border-color: #00f0ff;
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.blueprint-btn.active {
+  background: #00e5ff;
+  border-color: #00f0ff;
+  color: #04101e;
+  text-shadow: none;
+  font-weight: 700;
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.7);
+}
+
+/* ==================================================== */
+/* CAD BLUEPRINT / X-RAY VECTOR WIREFRAME MODE           */
+/* ==================================================== */
+.window-frame.mode-blueprint {
+  background: #04101e;
+  background-image: 
+    linear-gradient(rgba(0, 229, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(0, 229, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
+  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+  border: 1px solid rgba(0, 229, 255, 0.45);
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.9),
+    0 0 45px rgba(0, 229, 255, 0.25),
+    inset 0 1px 0 rgba(0, 229, 255, 0.4);
+}
+
+.window-frame.mode-blueprint .window-header {
+  background: rgba(4, 16, 30, 0.95);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.25);
+}
+
+.window-frame.mode-blueprint .brand {
+  color: #00f0ff;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
+}
+
+.window-frame.mode-blueprint .brand-title {
+  color: #00f0ff;
+  text-shadow: 0 0 14px rgba(0, 229, 255, 0.6);
+}
+
+.window-frame.mode-blueprint .brand-sub {
+  color: rgba(0, 229, 255, 0.7);
+}
+
+.window-frame.mode-blueprint .vline {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 229, 255, 0.9) 0%,
+    rgba(0, 229, 255, 0.6) 40%,
+    rgba(0, 229, 255, 0.2) 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.7);
+}
+
+.window-frame.mode-blueprint .clock-svg circle,
+.window-frame.mode-blueprint .clock-svg path,
+.window-frame.mode-blueprint .clock-svg line,
+.window-frame.mode-blueprint .clock-svg polyline,
+.window-frame.mode-blueprint .clock-svg polygon {
+  transition: stroke 0.35s ease, fill-opacity 0.35s ease;
+}
+
+.window-frame.mode-blueprint .numeral {
+  fill: #00f0ff;
+  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.8));
+}
+
+.window-frame.mode-blueprint .readout-time {
+  color: #00f0ff;
+  text-shadow: 0 0 12px rgba(0, 229, 255, 0.7);
+}
+
+.window-frame.mode-blueprint .readout-badges {
+  color: rgba(0, 229, 255, 0.65);
+}
+
+.window-frame.mode-blueprint #perpetual-calendar-window text,
+.window-frame.mode-blueprint .readout-date {
+  color: #00f0ff;
+  fill: #00f0ff;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+}
+
+.window-frame.mode-blueprint #moonphase-subdial text {
+  fill: #00f0ff;
+}
+
+.window-frame.mode-blueprint .time-control-btn {
+  border-color: rgba(0, 229, 255, 0.35);
+  color: #00f0ff;
+  background: rgba(0, 229, 255, 0.05);
+}
+
+.window-frame.mode-blueprint .horology-toolbar {
+  background: rgba(4, 16, 30, 0.88);
+  border-color: rgba(0, 229, 255, 0.3);
+}
+
+.window-frame.mode-blueprint .toolbar-divider {
+  background: rgba(0, 229, 255, 0.35);
+}
+
+/* Blueprint Layer SVG Styling */
+.blueprint-layer {
+  transition: opacity 0.4s ease;
+}
+
+.blueprint-grid-line {
+  stroke: rgba(0, 229, 255, 0.22);
+  stroke-width: 0.6;
+  stroke-dasharray: 2 4;
+}
+
+.blueprint-dim-circle {
+  fill: none;
+  stroke: rgba(0, 229, 255, 0.4);
+  stroke-width: 0.65;
+  stroke-dasharray: 3 3;
+}
+
+.blueprint-pivot {
+  fill: none;
+  stroke: #00f0ff;
+  stroke-width: 0.85;
+}
+
+.blueprint-pivot-center {
+  fill: #00f0ff;
+}
+
+.blueprint-text {
+  font-family: 'Fira Code', monospace;
+  font-size: 5.5px;
+  font-weight: 600;
+  fill: #00f0ff;
+  letter-spacing: 0.06em;
+}
+
+.blueprint-label-sub {
+  font-size: 4.5px;
+  fill: rgba(0, 229, 255, 0.75);
+}
+
+/* Material Theme Variants for Container */
+.window-frame.theme-obsidian-platinum .brand,
+.window-frame.theme-obsidian-platinum .brand-title,
+.window-frame.theme-obsidian-platinum .readout-time {
+  color: #f1f5f9;
+  text-shadow: 0 0 14px rgba(226, 232, 240, 0.45);
+}
+
+.window-frame.theme-obsidian-platinum .brand-sub,
+.window-frame.theme-obsidian-platinum .readout-badges {
+  color: rgba(148, 163, 184, 0.75);
+}
+
+@media (max-width: 520px) {
+  .dial-container {
+    max-width: 320px;
+  }
+  .horology-toolbar {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px;
+  }
+  .theme-selector-group {
+    justify-content: center;
+  }
+}

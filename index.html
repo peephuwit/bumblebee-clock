@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APIS — BUMBLEBEE D'OR</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Fira+Code:wght@400;500&family=Playfair+Display:ital,wght@1,500;1,700&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+  <!-- GSAP for precise, silky smooth timekeeping & monotonic hand rotations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body class="ambient">
+  <!-- App Window Container -->
+  <div class="window-frame">
+    
+    <!-- Titlebar / Header -->
+    <header class="window-header">
+      <div class="window-controls">
+        <span class="dot dot-red"></span>
+        <span class="dot dot-yellow"></span>
+        <span class="dot dot-green"></span>
+      </div>
+      <div class="window-title">
+        <span class="brand">BUMBLEBEE</span>
+        <span class="separator">—</span>
+        <span class="tech-tag html">HTML</span>
+        <span class="tech-tag css">CSS</span>
+        <span class="tech-tag js">JS</span>
+      </div>
+      <div class="window-endpoint">
+        <button id="sound-toggle" class="sound-btn" title="Toggle Mechanical Escapement Sound" aria-label="Toggle Escapement Sound">
+          <span class="sound-status-dot"></span>
+          <span id="sound-icon">🔊</span>
+          <span id="sound-label">ESCAPEMENT: ON</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Clock Stage -->
+    <main class="clock-stage">
+      
+      <!-- Suspension Wire -->
+      <div class="vline" id="silk-thread"></div>
+
+      <!-- Clock Header Branding -->
+      <div class="dial-brand">
+        <h1 class="brand-title">B U M B L E B E E</h1>
+        <p class="brand-sub">CALIBRE ROYALE — CHRONOMÈTRE AUTOMATIQUE</p>
+      </div>
+
+      <!-- Dial & Bee SVG Clockwork -->
+      <div class="dial-container">
+        <!-- Interactive Watch Crown at 3 o'clock (เม็ดมะยมสำหรับคลิกลาก/หมุนตั้งเวลา) -->
+        <div class="watch-crown-knob" id="watch-crown" title="Drag Up/Down to Wind & Set Time" aria-label="Winding Crown">
+          <div class="crown-fluting"></div>
+          <div class="crown-jewel"></div>
+        </div>
+
+        <svg class="clock-svg" viewBox="-225 -225 450 450" width="100%" height="100%">
+          <defs>
+            <!-- ── LUXURY HONEYCOMB PATTERN (Luminous Background Mesh) ── -->
+            <pattern id="honeycomb-mesh" width="28" height="48.497" patternUnits="userSpaceOnUse">
+              <path d="M 14 0 L 28 8.083 L 28 24.249 L 14 32.332 L 0 24.249 L 0 8.083 Z
+                       M 14 48.497 L 28 40.414 L 28 24.249 L 14 32.332 L 0 24.249 L 0 40.414 Z" 
+                    fill="none" 
+                    stroke="#ffd573" 
+                    stroke-width="0.65" 
+                    stroke-opacity="0.16" />
+            </pattern>
+
+            <!-- ── 1. PROPORTIONATE HONEYCOMB FOR SMALL GEAR (R = 22px, Cell R = 4.5px) ── -->
+            <pattern id="gear-honeycomb-small" width="13.5" height="23.383" patternUnits="userSpaceOnUse">
+              <polygon points="11.25,11.691 9,15.588 4.5,15.588 2.25,11.691 4.5,7.794 9,7.794" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+              <polygon points="4.5,0 2.25,3.897 -2.25,3.897 -4.5,0 -2.25,-3.897 2.25,-3.897" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+              <polygon points="18,0 15.75,3.897 11.25,3.897 9,0 11.25,-3.897 15.75,-3.897" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+              <polygon points="4.5,23.383 2.25,27.28 -2.25,27.28 -4.5,23.383 -2.25,19.486 2.25,19.486" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+              <polygon points="18,23.383 15.75,27.28 11.25,27.28 9,23.383 11.25,19.486 15.75,19.486" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+
+              <polygon points="11.25,3.897 9,7.794 4.5,7.794 2.25,3.897 4.5,0 9,0" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+              <polygon points="11.25,27.28 9,31.177 4.5,31.177 2.25,27.28 4.5,23.383 9,23.383" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+              <polygon points="4.5,15.588 2.25,19.486 -2.25,19.486 -4.5,15.588 -2.25,11.691 2.25,11.691" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+              <polygon points="18,15.588 15.75,19.486 11.25,19.486 9,15.588 11.25,11.691 15.75,11.691" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+
+              <polygon points="11.25,19.486 9,23.383 4.5,23.383 2.25,19.486 4.5,15.588 9,15.588" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+              <polygon points="11.25,-3.897 9,0 4.5,0 2.25,-3.897 4.5,-7.794 9,-7.794" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+              <polygon points="4.5,7.794 2.25,11.691 -2.25,11.691 -4.5,7.794 -2.25,3.897 2.25,3.897" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+              <polygon points="18,7.794 15.75,11.691 11.25,11.691 9,7.794 11.25,3.897 15.75,3.897" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" stroke-linejoin="round" />
+            </pattern>
+
+            <!-- ── 2. PROPORTIONATE HONEYCOMB FOR MEDIUM GEAR (R = 34px, Cell R = 6.5px) ── -->
+            <pattern id="gear-honeycomb-medium" width="19.5" height="33.775" patternUnits="userSpaceOnUse">
+              <polygon points="16.25,16.887 13,22.517 6.5,22.517 3.25,16.887 6.5,11.258 13,11.258" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+              <polygon points="6.5,0 3.25,5.629 -3.25,5.629 -6.5,0 -3.25,-5.629 3.25,-5.629" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+              <polygon points="26,0 22.75,5.629 16.25,5.629 13,0 16.25,-5.629 22.75,-5.629" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+              <polygon points="6.5,33.775 3.25,39.404 -3.25,39.404 -6.5,33.775 -3.25,28.146 3.25,28.146" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+              <polygon points="26,33.775 22.75,39.404 16.25,39.404 13,33.775 16.25,28.146 22.75,28.146" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+
+              <polygon points="16.25,5.629 13,11.258 6.5,11.258 3.25,5.629 6.5,0 13,0" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+              <polygon points="16.25,39.404 13,45.033 6.5,45.033 3.25,39.404 6.5,33.775 13,33.775" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+              <polygon points="6.5,22.517 3.25,28.146 -3.25,28.146 -6.5,22.517 -3.25,16.887 3.25,16.887" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+              <polygon points="26,22.517 22.75,28.146 16.25,28.146 13,22.517 16.25,16.887 22.75,16.887" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+
+              <polygon points="16.25,28.146 13,33.775 6.5,33.775 3.25,28.146 6.5,22.517 13,22.517" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+              <polygon points="16.25,-5.629 13,0 6.5,0 3.25,-5.629 6.5,-11.258 13,-11.258" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+              <polygon points="6.5,11.258 3.25,16.887 -3.25,16.887 -6.5,11.258 -3.25,5.629 3.25,5.629" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+              <polygon points="26,11.258 22.75,16.887 16.25,16.887 13,11.258 16.25,5.629 22.75,5.629" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" stroke-linejoin="round" />
+            </pattern>
+
+            <!-- ── 3. PROPORTIONATE HONEYCOMB FOR LARGE GEAR (R = 46px, Cell R = 8.5px) ── -->
+            <pattern id="gear-honeycomb-large" width="25.5" height="44.167" patternUnits="userSpaceOnUse">
+              <polygon points="21.25,22.084 17,29.445 8.5,29.445 4.25,22.084 8.5,14.722 17,14.722" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+              <polygon points="8.5,0 4.25,7.361 -4.25,7.361 -8.5,0 -4.25,-7.361 4.25,-7.361" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+              <polygon points="34,0 29.75,7.361 21.25,7.361 17,0 21.25,-7.361 29.75,-7.361" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+              <polygon points="8.5,44.167 4.25,51.528 -4.25,51.528 -8.5,44.167 -4.25,36.806 4.25,36.806" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+              <polygon points="34,44.167 29.75,51.528 21.25,51.528 17,44.167 21.25,36.806 29.75,36.806" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+
+              <polygon points="21.25,7.361 17,14.722 8.5,14.722 4.25,7.361 8.5,0 17,0" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+              <polygon points="21.25,51.528 17,58.889 8.5,58.889 4.25,51.528 8.5,44.167 17,44.167" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+              <polygon points="8.5,29.445 4.25,36.806 -4.25,36.806 -8.5,29.445 -4.25,22.084 4.25,22.084" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+              <polygon points="34,29.445 29.75,36.806 21.25,36.806 17,29.445 21.25,22.084 29.75,22.084" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+
+              <polygon points="21.25,36.806 17,44.167 8.5,44.167 4.25,36.806 8.5,29.445 17,29.445" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+              <polygon points="21.25,-7.361 17,0 8.5,0 4.25,-7.361 8.5,-14.722 17,-14.722" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+              <polygon points="8.5,14.722 4.25,22.084 -4.25,22.084 -8.5,14.722 -4.25,7.361 4.25,7.361" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+              <polygon points="34,14.722 29.75,22.084 21.25,22.084 17,14.722 21.25,7.361 29.75,7.361" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.75" stroke-linejoin="round" />
+            </pattern>
+
+            <!-- ── 4. PROPORTIONATE HONEYCOMB FOR GIANT GEAR (R = 58px, Cell R = 11.0px) ── -->
+            <pattern id="gear-honeycomb-giant" width="33" height="57.158" patternUnits="userSpaceOnUse">
+              <polygon points="27.5,28.579 22,38.105 11,38.105 5.5,28.579 11,19.053 22,19.053" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+              <polygon points="11,0 5.5,9.526 -5.5,9.526 -11,0 -5.5,-9.526 5.5,-9.526" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+              <polygon points="44,0 38.5,9.526 27.5,9.526 22,0 27.5,-9.526 38.5,-9.526" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+              <polygon points="11,57.158 5.5,66.684 -5.5,66.684 -11,57.158 -5.5,47.631 5.5,47.631" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+              <polygon points="44,57.158 38.5,66.684 27.5,66.684 22,57.158 27.5,47.631 38.5,47.631" fill="#ffd54f" fill-opacity="0.22" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+
+              <polygon points="27.5,9.526 22,19.053 11,19.053 5.5,9.526 11,0 22,0" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+              <polygon points="27.5,66.684 22,76.21 11,76.21 5.5,66.684 11,57.158 22,57.158" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+              <polygon points="11,38.105 5.5,47.631 -5.5,47.631 -11,38.105 -5.5,28.579 5.5,28.579" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+              <polygon points="44,38.105 38.5,47.631 27.5,47.631 22,38.105 27.5,28.579 38.5,28.579" fill="#ff9800" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+
+              <polygon points="27.5,47.631 22,57.158 11,57.158 5.5,47.631 11,38.105 22,38.105" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+              <polygon points="27.5,-9.526 22,0 11,0 5.5,-9.526 11,-19.053 22,-19.053" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+              <polygon points="11,19.053 5.5,28.579 -5.5,28.579 -11,19.053 -5.5,9.526 5.5,9.526" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+              <polygon points="44,19.053 38.5,28.579 27.5,28.579 22,19.053 27.5,9.526 38.5,9.526" fill="#e65100" fill-opacity="0.20" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" stroke-linejoin="round" />
+            </pattern>
+
+            <!-- Dynamic Honey-Gold Celestial Aura Gradients (Softly Faded & Gentle Radiance) -->
+            <radialGradient id="bee-aura-core" cx="50%" cy="45%" r="50%">
+              <stop offset="0%" stop-color="#fff8db" stop-opacity="0.18" />
+              <stop offset="25%" stop-color="#ffe57f" stop-opacity="0.10" />
+              <stop offset="60%" stop-color="#ffb300" stop-opacity="0.04" />
+              <stop offset="100%" stop-color="#ff6f00" stop-opacity="0" />
+            </radialGradient>
+
+            <radialGradient id="bee-aura-ambient" cx="50%" cy="45%" r="50%">
+              <stop offset="0%" stop-color="#ffe082" stop-opacity="0.10" />
+              <stop offset="40%" stop-color="#ffb74d" stop-opacity="0.05" />
+              <stop offset="75%" stop-color="#ff8f00" stop-opacity="0.015" />
+              <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+            </radialGradient>
+
+            <radialGradient id="bee-aura-outer-corona" cx="50%" cy="45%" r="50%">
+              <stop offset="0%" stop-color="#fff9c4" stop-opacity="0.06" />
+              <stop offset="45%" stop-color="#ffe082" stop-opacity="0.025" />
+              <stop offset="80%" stop-color="#ffb300" stop-opacity="0.008" />
+              <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+            </radialGradient>
+
+            <!-- Ultra-Wide Soft Luminous Aura Diffusion Filter -->
+            <filter id="aura-glow" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur1" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="28" result="blur2" />
+              <feGaussianBlur in="SourceGraphic" stdDeviation="48" result="blur3" />
+              <feMerge>
+                <feMergeNode in="blur3" />
+                <feMergeNode in="blur2" />
+                <feMergeNode in="blur1" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+
+            <!-- Warm Honey-Amber Radiant Underbody Aura (Soft & Subtle) -->
+            <radialGradient id="bee-aura" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ffd54f" stop-opacity="0.18" />
+              <stop offset="45%" stop-color="#ff9800" stop-opacity="0.06" />
+              <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+            </radialGradient>
+
+            <!-- 24K Polished Gold Gradients -->
+            <linearGradient id="gold-light" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="20%" stop-color="#fff2c7" />
+              <stop offset="55%" stop-color="#deb050" />
+              <stop offset="85%" stop-color="#945914" />
+              <stop offset="100%" stop-color="#3d1d03" />
+            </linearGradient>
+
+            <linearGradient id="gold-dark" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fceda4" />
+              <stop offset="30%" stop-color="#b88028" />
+              <stop offset="70%" stop-color="#5c2d05" />
+              <stop offset="95%" stop-color="#260f01" />
+              <stop offset="100%" stop-color="#0f0400" />
+            </linearGradient>
+
+            <!-- Rich Iridescent Honey-Amber Stained-Glass Wing Membrane (Left Forewing) -->
+            <linearGradient id="wing-membrane-left" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fffbe6" stop-opacity="0.75" />
+              <stop offset="20%" stop-color="#ffe066" stop-opacity="0.65" />
+              <stop offset="50%" stop-color="#ffa000" stop-opacity="0.50" />
+              <stop offset="80%" stop-color="#d95f02" stop-opacity="0.36" />
+              <stop offset="100%" stop-color="#592003" stop-opacity="0.22" />
+            </linearGradient>
+
+            <!-- Rich Iridescent Honey-Amber Stained-Glass Wing Membrane (Right Forewing) -->
+            <linearGradient id="wing-membrane-right" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fffbe6" stop-opacity="0.75" />
+              <stop offset="20%" stop-color="#ffe066" stop-opacity="0.65" />
+              <stop offset="50%" stop-color="#ffa000" stop-opacity="0.50" />
+              <stop offset="80%" stop-color="#d95f02" stop-opacity="0.36" />
+              <stop offset="100%" stop-color="#592003" stop-opacity="0.22" />
+            </linearGradient>
+
+            <!-- Secondary Translucent Hindwing Gradient (Subtle Amber-Topaz Glass) -->
+            <linearGradient id="hindwing-membrane" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fff8db" stop-opacity="0.70" />
+              <stop offset="40%" stop-color="#ffd54f" stop-opacity="0.50" />
+              <stop offset="80%" stop-color="#ff8f00" stop-opacity="0.35" />
+              <stop offset="100%" stop-color="#7c2d03" stop-opacity="0.20" />
+            </linearGradient>
+
+            <!-- Obsidian Velvet & Honey Abdomen Stripes -->
+            <linearGradient id="stripe-gold" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#e5a93b" />
+              <stop offset="30%" stop-color="#ffe899" />
+              <stop offset="50%" stop-color="#ffd54f" />
+              <stop offset="70%" stop-color="#ffe899" />
+              <stop offset="100%" stop-color="#b0741a" />
+            </linearGradient>
+
+            <linearGradient id="stripe-dark" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#040507" />
+              <stop offset="40%" stop-color="#1c1308" />
+              <stop offset="50%" stop-color="#2d1e0c" />
+              <stop offset="60%" stop-color="#1c1308" />
+              <stop offset="100%" stop-color="#040507" />
+            </linearGradient>
+
+            <!-- Ruby Jewel Gradient for Compound Eyes -->
+            <radialGradient id="bee-eye" cx="35%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#ff8080" />
+              <stop offset="30%" stop-color="#d61a1a" />
+              <stop offset="70%" stop-color="#700505" />
+              <stop offset="100%" stop-color="#1f0000" />
+            </radialGradient>
+
+            <!-- Golden Stinger & Apex Pointer Accent Gradient -->
+            <linearGradient id="stinger-gold" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fff5cc" />
+              <stop offset="40%" stop-color="#e8b038" />
+              <stop offset="80%" stop-color="#8a4f08" />
+              <stop offset="100%" stop-color="#3d1d03" />
+            </linearGradient>
+
+            <!-- Numerals 24K Gold Foil Gradient -->
+            <linearGradient id="digit-gold" x1="20%" y1="0%" x2="80%" y2="100%">
+              <stop offset="0%" stop-color="#fff8e3" />
+              <stop offset="35%" stop-color="#f5d485" />
+              <stop offset="70%" stop-color="#deb464" />
+              <stop offset="100%" stop-color="#b88028" />
+            </linearGradient>
+
+            <!-- Drop Shadows -->
+            <filter id="bee-shadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="#000000" flood-opacity="0.75" />
+            </filter>
+
+            <!-- Crystal Wing Soft Drop Shadow (Transparent, non-darkening) -->
+            <filter id="wing-glass-shadow" x="-30%" y="-30%" width="160%" height="160%">
+              <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity="0.35" />
+            </filter>
+
+            <!-- Wing Sheen & Golden Glow Filter -->
+            <filter id="gold-glow" x="-35%" y="-35%" width="170%" height="170%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur" />
+              <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.95  0 0.75 0 0 0.6  0 0 0.3 0 0.18  0 0 0 1.25 0" result="glow" />
+              <feMerge>
+                <feMergeNode in="glow" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+
+            <!-- Pure Radiant Wing Aura Glow Filter (แสงออร่าปีกเรืองรองนวลตา) -->
+            <filter id="wing-radiant-aura" x="-45%" y="-45%" width="190%" height="190%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
+              <feColorMatrix in="blur" type="matrix" values="1 0 0 0 1  0 0.82 0 0 0.65  0 0 0.35 0 0.2  0 0 0 1.6 0" result="glow" />
+              <feMerge>
+                <feMergeNode in="glow" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+
+            <!-- Luminous Wing Aura Silhouette Gradient Fill -->
+            <linearGradient id="wing-aura-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#fff8db" stop-opacity="0.45" />
+              <stop offset="50%" stop-color="#ffd54f" stop-opacity="0.25" />
+              <stop offset="100%" stop-color="#ff9800" stop-opacity="0.05" />
+            </linearGradient>
+            <!-- Luminous Timepiece Case Backplate Gradient -->
+            <radialGradient id="case-backplate-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#4a371c" stop-opacity="0.35" />
+              <stop offset="50%" stop-color="#241d14" stop-opacity="0.22" />
+              <stop offset="85%" stop-color="#141824" stop-opacity="0.15" />
+              <stop offset="100%" stop-color="#080a10" stop-opacity="0.0" />
+            </radialGradient>
+
+            <!-- Luminous Dial Face Champagne Glow -->
+            <radialGradient id="dial-plate-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#4d3b20" stop-opacity="0.45" />
+              <stop offset="60%" stop-color="#251d14" stop-opacity="0.30" />
+              <stop offset="100%" stop-color="#0d0e14" stop-opacity="0.15" />
+            </radialGradient>
+
+            <!-- Celestial Moonphase Aperture Clip -->
+            <clipPath id="moonphase-aperture-clip">
+              <circle cx="0" cy="112" r="23" />
+            </clipPath>
+          </defs>
+
+          <!-- ==================================================== -->
+          <!-- DIAL BACKGROUND: LUMINOUS CASE, MESH & RAILWAY TRACKS -->
+          <!-- ==================================================== -->
+
+          <!-- Luminous Case Backplate (ส่องสว่างเรือนนาฬิกา) -->
+          <circle cx="0" cy="0" r="220" fill="url(#case-backplate-glow)" />
+
+          <!-- Outer Luxury Bezel Rim Boundaries -->
+          <circle cx="0" cy="0" r="212" fill="none" stroke="rgba(246, 230, 193, 0.26)" stroke-width="1.2" />
+          <circle cx="0" cy="0" r="207" fill="none" stroke="rgba(246, 230, 193, 0.15)" stroke-width="0.6" />
+
+          <!-- Honeycomb Dial Background Disc -->
+          <circle cx="0" cy="0" r="142" fill="url(#dial-plate-glow)" />
+          <circle cx="0" cy="0" r="142" fill="url(#honeycomb-mesh)" />
+
+          <!-- Outer Orbit Ring behind Numerals -->
+          <circle cx="0" cy="0" r="202" fill="none" stroke="rgba(246, 230, 193, 0.20)" stroke-width="0.9" />
+          <circle cx="0" cy="0" r="178" fill="none" stroke="rgba(246, 230, 193, 0.28)" stroke-width="0.7" stroke-dasharray="1.5 5" />
+
+          <!-- Concentric Guide Rings -->
+          <g opacity="0.35">
+            <circle cx="0" cy="0" r="60" fill="none" stroke="#deb464" stroke-width="0.6" stroke-dasharray="1.5 3" />
+            <circle cx="0" cy="0" r="105" fill="none" stroke="#deb464" stroke-width="0.6" stroke-dasharray="1.5 4" />
+          </g>
+
+          <!-- ==================================================== -->
+          <!-- SKELETON HONEYCOMB GEAR TRAIN (HARMONIZED COMPLICATION) -->
+          <!-- "ขอบของฟันเฟืองดูกลมกลืนไปกับรังผึ้งด้านใน"             -->
+          <!-- ==================================================== -->
+          <g id="skeleton-gears-cluster" opacity="0.38">
+            <!-- ── GEAR 1: LARGE HONEYCOMB GEAR (ฟันเฟืองใหญ่ R = 46px @ -45,-45) ── -->
+            <g id="gear-large" class="skeleton-gear">
+              <!-- Proportionate Honeycomb Core extending seamlessly to rim -->
+              <circle cx="-45" cy="-45" r="42" fill="url(#gear-honeycomb-large)" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" />
+              <!-- Outer Harmonized Involute Gear Teeth Ring (24 teeth) -->
+              <circle cx="-45" cy="-45" r="44" fill="none" stroke="#ffd573" stroke-opacity="0.70" stroke-width="3.5" stroke-dasharray="3.8 7.7" />
+              <!-- Harmonized Delicate Gold Outer Rim Boundary -->
+              <circle cx="-45" cy="-45" r="42" fill="none" stroke="#ffd573" stroke-opacity="0.55" stroke-width="0.9" />
+              <!-- Center Bearing Jewel -->
+              <circle cx="-45" cy="-45" r="6.5" fill="url(#gold-dark)" stroke="#000" stroke-width="0.6" />
+              <circle cx="-45" cy="-45" r="3.2" fill="url(#bee-eye)" />
+              <circle cx="-45" cy="-45" r="1.0" fill="#ffffff" />
+            </g>
+
+            <!-- ── GEAR 2: MEDIUM HONEYCOMB GEAR (ฟันเฟืองกลาง R = 34px @ 36,-55) ── -->
+            <g id="gear-medium" class="skeleton-gear">
+              <!-- Proportionate Honeycomb Core extending seamlessly to rim -->
+              <circle cx="36" cy="-55" r="30.5" fill="url(#gear-honeycomb-medium)" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.7" />
+              <!-- Outer Harmonized Involute Gear Teeth Ring (18 teeth) -->
+              <circle cx="36" cy="-55" r="32.5" fill="none" stroke="#ffd573" stroke-opacity="0.70" stroke-width="3.0" stroke-dasharray="3.4 8.0" />
+              <!-- Harmonized Delicate Gold Outer Rim Boundary -->
+              <circle cx="36" cy="-55" r="30.5" fill="none" stroke="#ffd573" stroke-opacity="0.55" stroke-width="0.8" />
+              <!-- Center Bearing Jewel -->
+              <circle cx="36" cy="-55" r="5" fill="url(#gold-dark)" stroke="#000" stroke-width="0.5" />
+              <circle cx="36" cy="-55" r="2.5" fill="url(#bee-eye)" />
+              <circle cx="36" cy="-55" r="0.8" fill="#ffffff" />
+            </g>
+
+            <!-- ── GEAR 3: SMALL HONEYCOMB GEAR (ฟันเฟืองเล็ก R = 22px @ 68,-8) ── -->
+            <g id="gear-small" class="skeleton-gear">
+              <!-- Proportionate Honeycomb Core extending seamlessly to rim -->
+              <circle cx="68" cy="-8" r="19.5" fill="url(#gear-honeycomb-small)" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.6" />
+              <!-- Outer Harmonized Involute Gear Teeth Ring (12 teeth) -->
+              <circle cx="68" cy="-8" r="21" fill="none" stroke="#ffd573" stroke-opacity="0.70" stroke-width="2.6" stroke-dasharray="2.8 8.2" />
+              <!-- Harmonized Delicate Gold Outer Rim Boundary -->
+              <circle cx="68" cy="-8" r="19.5" fill="none" stroke="#ffd573" stroke-opacity="0.55" stroke-width="0.7" />
+              <!-- Center Bearing Jewel -->
+              <circle cx="68" cy="-8" r="3.8" fill="url(#gold-dark)" stroke="#000" stroke-width="0.4" />
+              <circle cx="68" cy="-8" r="1.8" fill="url(#bee-eye)" />
+              <circle cx="68" cy="-8" r="0.6" fill="#ffffff" />
+            </g>
+
+            <!-- ── GEAR 4: GIANT HONEYCOMB GEAR (ฟันเฟืองใหญ่สุด R = 58px @ -18, 58) ── -->
+            <g id="gear-giant" class="skeleton-gear">
+              <!-- Proportionate Honeycomb Core extending seamlessly to rim -->
+              <circle cx="-18" cy="58" r="53.5" fill="url(#gear-honeycomb-giant)" stroke="#ffd573" stroke-opacity="0.5" stroke-width="0.8" />
+              <!-- Outer Harmonized Involute Gear Teeth Ring (30 teeth) -->
+              <circle cx="-18" cy="58" r="56" fill="none" stroke="#ffd573" stroke-opacity="0.70" stroke-width="3.8" stroke-dasharray="4.2 7.5" />
+              <!-- Harmonized Delicate Gold Outer Rim Boundary -->
+              <circle cx="-18" cy="58" r="53.5" fill="none" stroke="#ffd573" stroke-opacity="0.55" stroke-width="1.0" />
+              <!-- Center Bearing Jewel -->
+              <circle cx="-18" cy="58" r="8.0" fill="url(#gold-dark)" stroke="#000" stroke-width="0.7" />
+              <circle cx="-18" cy="58" r="4.0" fill="url(#bee-eye)" />
+              <circle cx="-18" cy="58" r="1.2" fill="#ffffff" />
+            </g>
+          </g>
+
+          <!-- Inner Clock Bezel & Chapter Ring Ticks -->
+          <circle cx="0" cy="0" r="142" 
+                  fill="none" 
+                  stroke="#7c531d" 
+                  stroke-width="2.6" 
+                  stroke-dasharray="0.65 14.22" 
+                  opacity="0.85" />
+          
+          <circle cx="0" cy="0" r="142" 
+                  fill="none" 
+                  stroke="#fbe09d" 
+                  stroke-width="4.2" 
+                  stroke-dasharray="1.1 73.25" 
+                  opacity="0.95" />
+
+          <circle cx="0" cy="0" r="138" fill="none" stroke="rgba(196, 149, 64, 0.35)" stroke-width="0.6" />
+          <circle cx="0" cy="0" r="146" fill="none" stroke="rgba(196, 149, 64, 0.22)" stroke-width="0.6" />
+
+          <!-- ==================================================== -->
+          <!-- PERPETUAL CALENDAR COMPLICATION APERTURE (12 O'CLOCK) -->
+          <!-- (หน้าต่างบอก วันที่-เดือน-ปี สไตล์ Perpetual Calendar)     -->
+          <!-- ==================================================== -->
+          <g id="perpetual-calendar-window" filter="url(#bee-shadow)">
+            <!-- Outer Gold Chamfered Cartouche Frame -->
+            <rect x="-44" y="-123" width="88" height="16" rx="3.5" fill="#070912" stroke="url(#gold-light)" stroke-width="0.9" opacity="0.95" />
+            <!-- Inner Inset Shadow Border -->
+            <rect x="-42.5" y="-121.5" width="85" height="13" rx="2.5" fill="none" stroke="rgba(246, 230, 193, 0.28)" stroke-width="0.5" />
+            <!-- Calendar Date Text -->
+            <text id="dial-calendar-date" x="0" y="-112.8" text-anchor="middle" font-family="'Fira Code', monospace" font-size="6.2" font-weight="600" fill="url(#stinger-gold)" letter-spacing="0.08em">SUN • 30 AUG 2026</text>
+          </g>
+
+          <!-- ==================================================== -->
+          <!-- TRUE CELESTIAL MOONPHASE COMPLICATION SUBDIAL         -->
+          <!-- (หน้าปัดย่อยบอกข้างขึ้น-ข้างแรมดาราศาสตร์แท้ Patek Philippe) -->
+          <!-- ==================================================== -->
+          <g id="moonphase-subdial" filter="url(#bee-shadow)">
+            <!-- Outer Gold Bezel Rim Frame -->
+            <circle cx="0" cy="112" r="24.5" fill="#070912" stroke="url(#gold-light)" stroke-width="1.0" opacity="0.95" />
+            <circle cx="0" cy="112" r="23.2" fill="none" stroke="rgba(246, 230, 193, 0.35)" stroke-width="0.5" stroke-dasharray="1 2.5" />
+            
+            <!-- Clipped Moon Disc Area -->
+            <g clip-path="url(#moonphase-aperture-clip)">
+              <!-- Deep Midnight Lapis Lazuli Sky -->
+              <circle cx="0" cy="112" r="23" fill="#04060c" />
+              
+              <!-- Rotating Astronomical Lunar Disc (Pivots around 0, 112) -->
+              <g id="moonphase-disc">
+                <!-- Celestial Constellation Stars -->
+                <circle cx="-12" cy="105" r="0.6" fill="#ffffff" opacity="0.85" />
+                <circle cx="14" cy="119" r="0.5" fill="#ffd573" opacity="0.9" />
+                <circle cx="-8" cy="121" r="0.5" fill="#ffffff" opacity="0.75" />
+                <circle cx="10" cy="103" r="0.6" fill="#ffd573" opacity="0.85" />
+                <circle cx="-4" cy="111" r="0.4" fill="#ffffff" opacity="0.8" />
+                <circle cx="5" cy="113" r="0.4" fill="#ffd573" opacity="0.8" />
+
+                <!-- Moon 1 (Upper Hemisphere @ 0, 99) -->
+                <circle cx="0" cy="99" r="6.8" fill="url(#stinger-gold)" filter="url(#gold-glow)" />
+                <circle cx="-1.5" cy="97.5" r="1.6" fill="url(#gold-dark)" opacity="0.35" />
+                <circle cx="2.0" cy="100.5" r="1.1" fill="url(#gold-dark)" opacity="0.3" />
+
+                <!-- Moon 2 (Lower Hemisphere @ 0, 125) -->
+                <circle cx="0" cy="125" r="6.8" fill="url(#stinger-gold)" filter="url(#gold-glow)" />
+                <circle cx="-1.5" cy="123.5" r="1.6" fill="url(#gold-dark)" opacity="0.35" />
+                <circle cx="2.0" cy="126.5" r="1.1" fill="url(#gold-dark)" opacity="0.3" />
+              </g>
+
+              <!-- Classic Double-Lobed Swiss Moonphase Mask Silhouette -->
+              <path d="M -23,112 C -23,123 23,123 23,112 C 23,117 12,121 0,115.5 C -12,121 -23,117 -23,112 Z" 
+                    fill="#070912" stroke="url(#gold-dark)" stroke-width="0.6" />
+            </g>
+
+            <!-- Lunar Subdial Labels -->
+            <text x="0" y="96.5" text-anchor="middle" font-family="'Fira Code', monospace" font-size="3.6" font-weight="600" fill="#deb464" opacity="0.85" letter-spacing="0.08em">LUNAR</text>
+            <text x="0" y="130.5" text-anchor="middle" font-family="'Fira Code', monospace" font-size="3.8" font-weight="600" fill="#ffd573" opacity="0.9">29½ DAYS</text>
+          </g>
+
+          <!-- ==================================================== -->
+          <!-- NUMERALS 1 - 12 (OUTSIDE THE CHAPTER RING)           -->
+          <!-- Orbit Radius R ≈ 178px                               -->
+          <!-- ==================================================== -->
+          <g class="clock-numerals" filter="url(#gold-glow)">
+            <g transform="translate(0, -178)"><text class="numeral num-12" x="0" y="0" text-anchor="middle">12</text></g>
+            <g transform="translate(89, -154)"><text class="numeral num-1" x="0" y="0" text-anchor="middle">1</text></g>
+            <g transform="translate(154, -89)"><text class="numeral num-2" x="0" y="0" text-anchor="middle">2</text></g>
+            <g transform="translate(178, 0)"><text class="numeral num-3" x="0" y="0" text-anchor="middle">3</text></g>
+            <g transform="translate(154, 89)"><text class="numeral num-4" x="0" y="0" text-anchor="middle">4</text></g>
+            <g transform="translate(89, 154)"><text class="numeral num-5" x="0" y="0" text-anchor="middle">5</text></g>
+            <g transform="translate(0, 178)"><text class="numeral num-6" x="0" y="0" text-anchor="middle">6</text></g>
+            <g transform="translate(-89, 154)"><text class="numeral num-7" x="0" y="0" text-anchor="middle">7</text></g>
+            <g transform="translate(-154, 89)"><text class="numeral num-8" x="0" y="0" text-anchor="middle">8</text></g>
+            <g transform="translate(-178, 0)"><text class="numeral num-9" x="0" y="0" text-anchor="middle">9</text></g>
+            <g transform="translate(-154, -89)"><text class="numeral num-10" x="0" y="0" text-anchor="middle">10</text></g>
+            <g transform="translate(-89, -154)"><text class="numeral num-11" x="0" y="0" text-anchor="middle">11</text></g>
+          </g>
+
+          <!-- ==================================================== -->
+          <!-- LAYER 1: SECOND HAND (UNDERNEATH THE BEE BODY)       -->
+          <!-- "เข็มวินาทียาวถึงตัวเลขข้างนอก โดยอีกฝั่งไม่เลยตัวผึ้ง"  -->
+          <!-- ==================================================== -->
+          <g id="sec" class="hand-group">
+            <g class="second-sculpture" filter="url(#bee-shadow)">
+              <!-- Compact Pivot Hub (Hidden under Bee Body - No rear tail) -->
+              <circle cx="0" cy="0" r="2.2" fill="url(#stinger-gold)" />
+
+              <!-- Slender Central Needle Shaft Extending to Outer Numerals (-175px) -->
+              <line x1="0" y1="0" x2="0" y2="-175" stroke="#ffd573" stroke-width="0.85" />
+              <line x1="0" y1="-70" x2="0" y2="-175" stroke="#ffffff" stroke-width="0.6" />
+
+              <!-- Luminous Second Indicator Dot (@ -175px) -->
+              <circle cx="0" cy="-175" r="2.0" fill="#ffffff" filter="url(#gold-glow)" />
+              <circle cx="0" cy="-175" r="1.0" fill="#ff7b12" />
+            </g>
+          </g>
+
+          <!-- ==================================================== -->
+          <!-- RADIANT CELESTIAL HONEY AURA EFFECT (EXPANSIVE & SOFT) -->
+          <!-- "ระยะความสว่างกว้างขึ้น และสีสว่างจางลงละมุนตา"          -->
+          <!-- ==================================================== -->
+          <g id="bee-radiance" filter="url(#aura-glow)" transform="scale(0.70)">
+            <!-- Ultra-Wide Ambient Corona (Expanding across Dial R = 180px) -->
+            <ellipse cx="0" cy="18" rx="165" ry="180" fill="url(#bee-aura-outer-corona)" />
+            <!-- Mid Soft Amber Haze (R = 125px) -->
+            <ellipse cx="0" cy="18" rx="110" ry="125" fill="url(#bee-aura-ambient)" />
+            <!-- Inner Soft Champagne Luminous Core (R = 80px) -->
+            <ellipse cx="0" cy="18" rx="70" ry="80" fill="url(#bee-aura-core)" />
+          </g>
+
+          <!-- Interactive Radiant Shockwave Ripple Rings -->
+          <g id="bee-ripple-group" pointer-events="none" filter="url(#gold-glow)">
+            <circle id="bee-shockwave-1" cx="0" cy="12" r="22" fill="none" stroke="#ffd573" stroke-width="2.2" opacity="0" />
+            <circle id="bee-shockwave-2" cx="0" cy="12" r="22" fill="none" stroke="#ffe57f" stroke-width="1.4" opacity="0" />
+          </g>
+
+          <!-- ==================================================== -->
+          <!-- LAYER 2A: BEE LEGS & HINDWINGS (ขาของผึ้งและปีกลอง)   -->
+          <!-- ==================================================== -->
+          <g id="bee-underbody" filter="url(#bee-shadow)" transform="scale(0.70)">
+            <!-- Warm Radiant Honey Underbody Aura -->
+            <ellipse cx="0" cy="26" rx="35" ry="46" fill="url(#bee-aura)" />
+
+            <!-- ── 1. SLENDER ARTICULATED BEE LEGS (6 LEGS) ──────── -->
+            <g id="bee-legs" filter="url(#gold-glow)">
+              <!-- Forelegs (Leg I - Symmetrical Outstretched Poise framing Head) -->
+              <polyline id="bee-foreleg-left" points="-5,-7 -18,-12 -24,-22 -20,-30" fill="none" stroke="url(#gold-light)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+              <polyline points="5,-7 18,-12 24,-22 20,-30" fill="none" stroke="url(#gold-dark)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+
+              <!-- Midlegs (Leg II - Outward Flaring Symmetrical Articulation) -->
+              <polyline points="-7,0 -22,2 -30,12 -38,24" fill="none" stroke="url(#gold-light)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+              <polyline points="7,0 22,2 30,12 38,24" fill="none" stroke="url(#gold-dark)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+
+              <!-- Hindlegs (Leg III - Framing refined plump abdomen and stinger) -->
+              <polyline id="bee-hindleg-left" points="-5,12 -24,30 -36,56 -26,78 -18,86" fill="none" stroke="url(#gold-light)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+              <polyline id="bee-hindleg-right" points="5,12 24,30 36,56 26,78 18,86" fill="none" stroke="url(#gold-dark)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+          </g>
+
+          <!-- ==================================================== -->
+          <!-- LAYER 2B: CLOCK HAND WINGS (ปีกเข็มสั้นและเข็มยาว)      -->
+          <!-- (อยู่บนขาผึ้ง แต่อยู่ใต้ตัวผึ้ง)                         -->
+          <!-- ==================================================== -->
+
+          <!-- ── WING 3: CLOCK HAND 2 (MINUTE HAND - LEFT FOREWING, 144px) ── -->
+          <g id="min" class="hand-group">
+            <!-- ── LUMINOUS RADIANT WING AURA (ออร่าแสงเรืองรองปีกเข็มยาว) ── -->
+            <g class="wing-aura-halo" filter="url(#wing-radiant-aura)">
+              <!-- Soft Radiant Aura Fill -->
+              <path d="M 0,0 C -5,-24 -13,-62 -16,-96 C -17.5,-116 -12,-134 0,-144 C 5,-140 16,-124 20,-104 C 26,-78 24,-44 12,-20 C 6,-10 2,-4 0,0 Z" 
+                    fill="url(#wing-aura-gradient)" />
+              <!-- Outer Radiant Aura Halo Contour -->
+              <path d="M 0,0 C -5,-24 -13,-62 -16,-96 C -17.5,-116 -12,-134 0,-144 C 5,-140 16,-124 20,-104 C 26,-78 24,-44 12,-20 C 6,-10 2,-4 0,0 Z" 
+                    fill="none" stroke="#ffd573" stroke-width="5.0" stroke-opacity="0.45" />
+            </g>
+
+            <g class="wing-minute-sculpture" filter="url(#wing-glass-shadow)">
+              <!-- ── 1. AUTHENTIC ANATOMICAL HONEYBEE WING MEMBRANE (LEFT FOREWING) ──── -->
+              <path d="M 0,0 C -5,-24 -13,-62 -16,-96 C -17.5,-116 -12,-134 0,-144 C 5,-140 16,-124 20,-104 C 26,-78 24,-44 12,-20 C 6,-10 2,-4 0,0 Z" 
+                    fill="url(#wing-membrane-left)" />
+
+              <!-- Outer Golden Structural Rib Contour -->
+              <path d="M 0,0 C -5,-24 -13,-62 -16,-96 C -17.5,-116 -12,-134 0,-144 C 5,-140 16,-124 20,-104 C 26,-78 24,-44 12,-20 C 6,-10 2,-4 0,0 Z" 
+                    fill="none" stroke="url(#gold-light)" stroke-width="1.4" />
+
+              <!-- Pterostigma (True Anatomical Wing Stigma Cell on Leading Edge) -->
+              <polygon points="-12,-110 -15.5,-116 -17,-123 -13.5,-120" fill="#ffd573" opacity="0.85" />
+
+              <!-- ── 2. AUTHENTIC APIS MELLIFERA CELLULAR VENATION (LEFT FOREWING) ── -->
+              <!-- Primary Anterior Costal & Radial Vein Trunk -->
+              <path d="M 0,-8 C -4,-28 -10,-64 -13,-96 C -14.5,-112 -12.5,-120 0,-144" 
+                    fill="none" stroke="#ffffff" stroke-width="0.9" stroke-opacity="0.95" />
+
+              <!-- 1. Elongate Marginal Cell (R1) -->
+              <path d="M -13.5,-120 C -15,-127 -11,-136 0,-144 M -13.5,-120 C -8,-125 -4,-134 0,-144" 
+                    fill="none" stroke="#ffffff" stroke-width="0.6" stroke-opacity="0.88" />
+
+              <!-- 2. Submarginal Cells 1, 2, 3 (1Rs, 2Rs, 3Rs Closed Cells) -->
+              <path d="M -13,-96 C -7,-98 -4,-106 -5,-114 M -5,-114 C -11,-118 -14,-116 -13,-96 M -5,-114 C -2,-118 0,-125 1,-132 M -5,-114 C -8,-116 -9,-123 -7,-128 M -7,-128 C -4,-132 0,-138 0,-144" 
+                    fill="none" stroke="#ffffff" stroke-width="0.6" stroke-opacity="0.88" stroke-linejoin="round" />
+
+              <!-- 3. Discal & Basal Closed Cells (1M, 2M, 1R, 2R) -->
+              <path d="M 0,-24 C 3,-34 6,-52 6,-70 C 4,-78 2,-84 0,-88 M 6,-70 C 11,-76 16,-82 20,-92 C 19,-104 14,-112 8,-115 C 2,-111 0,-103 1,-97 M 6,-70 C -3,-82 -10,-90 -13,-96" 
+                    fill="none" stroke="#ffffff" stroke-width="0.6" stroke-opacity="0.88" stroke-linejoin="round" />
+
+              <!-- 4. Subdiscal, Cubital & Posterior Marginal Cells (1Cu, 2Cu, Anal) -->
+              <path d="M 6,-52 C 14,-60 19,-68 23,-80 C 24,-92 21,-104 15,-110 M 0,-44 C 6,-54 12,-64 16,-76 M 23,-80 C 25,-90 23,-98 19,-108 M 15,-110 C 17,-116 14,-122 8,-128 M 15,-96 C 19,-104 16,-112 10,-120" 
+                    fill="none" stroke="#ffffff" stroke-width="0.5" stroke-opacity="0.78" stroke-linecap="round" />
+
+              <!-- ── 3. ROYAL MINUTE ARROW APEX POINTER (@ -144px) ──── -->
+              <polygon points="0,-146 -4.5,-136 0,-133 4.5,-136" fill="url(#stinger-gold)" filter="url(#gold-glow)" />
+              <polygon points="0,-146 -2.2,-137 0,-134 2.2,-137" fill="#ffffff" />
+            </g>
+          </g>
+
+          <!-- ── WING 4: CLOCK HAND 1 (HOUR HAND - RIGHT FOREWING, 96px, TOPMOST HAND) ── -->
+          <g id="hour" class="hand-group">
+            <!-- ── LUMINOUS RADIANT WING AURA (ออร่าแสงเรืองรองปีกเข็มสั้น) ── -->
+            <g class="wing-aura-halo" filter="url(#wing-radiant-aura)">
+              <!-- Soft Radiant Aura Fill -->
+              <path d="M 0,0 C 3.5,-16 8.5,-42 11,-64 C 11.5,-78 8,-90 0,-96 C -3.5,-93 -11,-82 -13.5,-68 C -17.5,-52 -16,-28 -8,-14 C -4,-7 -1.5,-3 0,0 Z" 
+                    fill="url(#wing-aura-gradient)" />
+              <!-- Outer Radiant Aura Halo Contour -->
+              <path d="M 0,0 C 3.5,-16 8.5,-42 11,-64 C 11.5,-78 8,-90 0,-96 C -3.5,-93 -11,-82 -13.5,-68 C -17.5,-52 -16,-28 -8,-14 C -4,-7 -1.5,-3 0,0 Z" 
+                    fill="none" stroke="#ffd573" stroke-width="4.2" stroke-opacity="0.45" />
+            </g>
+
+            <g class="wing-hour-sculpture" filter="url(#wing-glass-shadow)">
+              <!-- ── 1. AUTHENTIC ANATOMICAL HONEYBEE WING MEMBRANE (RIGHT FOREWING) ────────────── -->
+              <path d="M 0,0 C 3.5,-16 8.5,-42 11,-64 C 11.5,-78 8,-90 0,-96 C -3.5,-93 -11,-82 -13.5,-68 C -17.5,-52 -16,-28 -8,-14 C -4,-7 -1.5,-3 0,0 Z" 
+                    fill="url(#wing-membrane-right)" />
+
+              <!-- Outer Golden Structural Rib Contour -->
+              <path d="M 0,0 C 3.5,-16 8.5,-42 11,-64 C 11.5,-78 8,-90 0,-96 C -3.5,-93 -11,-82 -13.5,-68 C -17.5,-52 -16,-28 -8,-14 C -4,-7 -1.5,-3 0,0 Z" 
+                    fill="none" stroke="url(#gold-light)" stroke-width="1.3" />
+
+              <!-- Pterostigma (True Anatomical Wing Stigma Cell on Leading Edge) -->
+              <polygon points="8,-73 10.5,-77 11.5,-82 9,-80" fill="#ffd573" opacity="0.85" />
+
+              <!-- ── 2. AUTHENTIC APIS MELLIFERA CELLULAR VENATION (RIGHT FOREWING) ── -->
+              <!-- Primary Anterior Costal & Radial Vein Trunk -->
+              <path d="M 0,-5 C 2.5,-18 7,-42 9,-64 C 10,-74 8.5,-80 0,-96" 
+                    fill="none" stroke="#ffffff" stroke-width="0.8" stroke-opacity="0.92" />
+
+              <!-- 1. Elongate Marginal Cell (R1) -->
+              <path d="M 9,-80 C 10,-85 7.5,-91 0,-96 M 9,-80 C 5,-83 2.5,-89 0,-96" 
+                    fill="none" stroke="#ffffff" stroke-width="0.55" stroke-opacity="0.85" />
+
+              <!-- 2. Submarginal Cells 1, 2, 3 (Polygonal Cell Network) -->
+              <path d="M 9,-64 C 4.5,-65 2.5,-71 3.5,-76 M 3.5,-76 C 7,-79 9,-77 9,-64 M 3.5,-76 C 1.5,-79 0,-83 -0.5,-88 M 3.5,-76 C 5.5,-77 6,-82 4.5,-85 M 4.5,-85 C 2.5,-88 0,-92 0,-96" 
+                    fill="none" stroke="#ffffff" stroke-width="0.55" stroke-opacity="0.85" stroke-linejoin="round" />
+
+              <!-- 3. Discal & Basal Cells (1M, 2M, 1R, 2R) -->
+              <path d="M 0,-16 C -2,-22 -4,-34 -4,-46 C -2.5,-52 -1,-56 0,-58 M -4,-46 C -7,-50 -10,-54 -13,-60 C -12,-68 -9.5,-74 -5,-76 C -1.5,-74 0,-68 -0.5,-64 M -4,-46 C 2,-54 7,-60 9,-64" 
+                    fill="none" stroke="#ffffff" stroke-width="0.55" stroke-opacity="0.85" stroke-linejoin="round" />
+
+              <!-- 4. Subdiscal, Cubital & Posterior Marginal Cells (1Cu, 2Cu, Anal) -->
+              <path d="M -4,-34 C -9,-38 -12,-44 -15,-52 C -15.5,-60 -13,-68 -9,-72 M 0,-30 C -4,-36 -8,-42 -11,-50 M -15,-52 C -16,-58 -15.5,-64 -13,-70 M -9,-72 C -11,-76 -9,-80 -5,-84 M -9,-63 C -12,-68 -10,-74 -6,-79" 
+                    fill="none" stroke="#ffffff" stroke-width="0.45" stroke-opacity="0.75" stroke-linecap="round" />
+
+              <!-- ── 3. ROYAL HOUR ARROW APEX POINTER (@ -96px) ───── -->
+              <polygon points="0,-98 -4.5,-88 0,-85 4.5,-88" fill="url(#stinger-gold)" filter="url(#gold-glow)" />
+              <polygon points="0,-98 -2.2,-89 0,-86 2.2,-89" fill="#ffffff" />
+            </g>
+          </g>
+
+          <!-- ==================================================== -->
+          <!-- LAYER 2C: QUEEN BEE BODY (ตัวผึ้ง - อยู่บนปีกเข็ม)      -->
+          <!-- ==================================================== -->
+          <g id="spider-torso" filter="url(#bee-shadow)" transform="scale(0.70)">
+            <!-- ── 2. REFINED PLUMP STRIPED ABDOMEN (ตูดผึ้งอวบอิ่มพอดีตัว) ─ -->
+            <g id="spider-abdomen">
+              <!-- Base Shadow Plate -->
+              <path d="M 0,4 C -12,4 -22,14 -22,28 C -22,46 -14,58 0,66 C 14,58 22,46 22,28 C 22,14 12,4 0,4 Z" 
+                    fill="#080301" />
+
+              <!-- ── Segment 1: Upper Curved Gold Band (y: 4 to 15) ── -->
+              <path d="M 0,4 C -9,4 -16,8 -19,15 C -9,18 0,18 0,18 C 0,18 9,18 19,15 C 16,8 9,4 0,4 Z" 
+                    fill="url(#stripe-gold)" />
+              <path d="M 0,4 C 9,4 16,8 19,15 C 9,18 0,18 0,18 Z" fill="url(#gold-dark)" opacity="0.35" />
+
+              <!-- ── Segment 2: Obsidian Velvet Black Band (y: 15 to 29, max width: x = ±22px) ── -->
+              <path d="M -19,15 C -21,20 -22,24 -22,29 C -11,32 0,32 0,32 C 0,32 11,32 22,29 C 22,24 21,20 19,15 C 9,18 0,18 -19,15 Z" 
+                    fill="url(#stripe-dark)" />
+              <!-- Radiant Amber Separator Trim -->
+              <path d="M -19,15 C -9,18 0,18 0,18 C 0,18 9,18 19,15" fill="none" stroke="#ffd573" stroke-width="0.85" opacity="0.85" />
+
+              <!-- ── Segment 3: Mid Curved Gold Band (y: 29 to 43) ── -->
+              <path d="M -22,29 C -22,34 -20,39 -19,43 C -9,46 0,46 0,46 C 0,46 9,46 19,43 C 20,39 22,34 22,29 C 11,32 0,32 -22,29 Z" 
+                    fill="url(#stripe-gold)" />
+              <path d="M 0,32 C 11,32 22,29 19,43 C 9,46 0,46 0,46 Z" fill="url(#gold-dark)" opacity="0.35" />
+              <path d="M -22,29 C -11,32 0,32 0,32 C 0,32 11,32 22,29" fill="none" stroke="#ffd573" stroke-width="0.85" opacity="0.85" />
+
+              <!-- ── Segment 4: Lower Obsidian Velvet Black Band (y: 43 to 55) ── -->
+              <path d="M -19,43 C -16,48 -13,52 -12,55 C -6,57 0,57 0,57 C 0,57 6,57 12,55 C 13,52 16,48 19,43 C 9,46 0,46 -19,43 Z" 
+                    fill="url(#stripe-dark)" />
+              <path d="M -19,43 C -9,46 0,46 0,46 C 0,46 9,46 19,43" fill="none" stroke="#ffd573" stroke-width="0.85" opacity="0.85" />
+
+              <!-- ── Segment 5: Tapered Gold Apex Dome (y: 55 to 66) ── -->
+              <path d="M -12,55 C -8,60 -5,63 0,66 C 5,63 8,60 12,55 C 6,57 0,57 -12,55 Z" 
+                    fill="url(#stripe-gold)" />
+              <path d="M -12,55 C -6,57 0,57 0,57 C 0,57 6,57 12,55" fill="none" stroke="#ffd573" stroke-width="0.85" opacity="0.85" />
+
+              <!-- ── 4. GLEAMING SHARP GOLDEN STINGER (เหล็กในทรงแหลมคมขนาดย่อม) ─────── -->
+              <path d="M 0,65 L -1.6,65 C -1.0,69 -0.4,72 0,75.5 Z" fill="url(#gold-light)" filter="url(#gold-glow)" />
+              <path d="M 0,65 L 1.6,65 C 1.0,69 0.4,72 0,75.5 Z" fill="url(#gold-dark)" filter="url(#gold-glow)" />
+              <polygon points="0,65 -0.5,70 0,76 0.5,70" fill="#ffd573" filter="url(#gold-glow)" />
+            </g>
+
+            <!-- ── 3. CHISELED THORAX (MESOSOMA ARMOR) ──────────── -->
+            <g id="bee-thorax">
+              <!-- Left Armor Facet -->
+              <polygon points="0,-12 -12,-8 -14,4 0,6" fill="url(#gold-light)" />
+              <!-- Right Armor Facet -->
+              <polygon points="0,-12 12,-8 14,4 0,6" fill="url(#gold-dark)" />
+            </g>
+
+            <!-- ── 4. ROYAL BEE HEAD, EYES & ANTENNAE ───────────── -->
+            <g id="bee-head">
+              <!-- Head Armor Plate -->
+              <polygon points="0,-22 -9,-17 -7,-11 0,-10" fill="url(#gold-light)" />
+              <polygon points="0,-22 9,-17 7,-11 0,-10" fill="url(#gold-dark)" />
+
+              <!-- Grand Ruby-Amber Compound Eyes -->
+              <!-- Left Eye -->
+              <ellipse cx="-7" cy="-15" rx="3.2" ry="4.8" transform="rotate(-15 -7 -15)" fill="url(#bee-eye)" filter="url(#gold-glow)" />
+              <circle cx="-6.5" cy="-16" r="0.8" fill="#ffffff" />
+              <!-- Right Eye -->
+              <ellipse cx="7" cy="-15" rx="3.2" ry="4.8" transform="rotate(15 7 -15)" fill="url(#bee-eye)" filter="url(#gold-glow)" />
+              <circle cx="6.5" cy="-16" r="0.8" fill="#ffffff" />
+
+              <!-- Elegant Arched Golden Antennae with Bead Nodes -->
+              <!-- Left Antenna -->
+              <g id="bee-antenna-left">
+                <path d="M -3,-20 C -6,-26 -12,-30 -16,-34" fill="none" stroke="url(#gold-light)" stroke-width="1.1" stroke-linecap="round" />
+                <circle cx="-16" cy="-34" r="1.3" fill="#ffd573" filter="url(#gold-glow)" />
+                <circle cx="-16" cy="-34" r="0.6" fill="#ffffff" />
+              </g>
+
+              <!-- Right Antenna -->
+              <g id="bee-antenna-right">
+                <path d="M 3,-20 C 6,-26 12,-30 16,-34" fill="none" stroke="url(#gold-dark)" stroke-width="1.1" stroke-linecap="round" />
+                <circle cx="16" cy="-34" r="1.3" fill="#ffd573" filter="url(#gold-glow)" />
+                <circle cx="16" cy="-34" r="0.6" fill="#ffffff" />
+              </g>
+            </g>
+          </g>
+
+          <!-- ==================================================== -->
+          <!-- LAYER 2D: SECONDARY HINDWINGS (ปีกคู่เล็กชีววิทยาแท้ APIS MELLIFERA) ── -->
+          <!-- ==================================================== -->
+          <g id="bee-hindwings" filter="url(#wing-glass-shadow)" transform="scale(0.70)">
+            <!-- ── Left Hindwing (ปีกหลังซ้าย - กายวิภาคปีกผึ้งแท้) ──────── -->
+            <!-- Wing Membrane -->
+            <path d="M -8,2 C -18,8 -32,20 -40,40 C -43,50 -36,60 -24,58 C -16,56 -13,46 -15,34 C -16,22 -11,10 -8,2 Z" 
+                  fill="url(#hindwing-membrane)" />
+            <!-- Outer Golden Structural Rib Contour -->
+            <path d="M -8,2 C -18,8 -32,20 -40,40 C -43,50 -36,60 -24,58 C -16,56 -13,46 -15,34 C -16,22 -11,10 -8,2 Z" 
+                  fill="none" stroke="url(#gold-light)" stroke-width="1.1" opacity="0.9" />
+
+            <!-- Row of Hamuli (แถบหนามเกาะเกี่ยวปีกสีทองตามธรรมชาติ) -->
+            <circle cx="-24" cy="18" r="0.75" fill="#ffd573" />
+            <circle cx="-28" cy="23" r="0.75" fill="#ffd573" />
+            <circle cx="-32" cy="29" r="0.75" fill="#ffd573" />
+            <circle cx="-36" cy="35" r="0.75" fill="#ffd573" />
+
+            <!-- Authentic Biological Hindwing Closed Cells & Veins -->
+            <!-- 1. Costal & Radial Vein Trunk (C+Sc+R) -->
+            <path d="M -8,2 C -18,8 -32,20 -40,40" fill="none" stroke="#ffffff" stroke-width="0.8" stroke-opacity="0.9" />
+            <!-- 2. Closed Basal Radial & Medial Cell (R+M Cell) -->
+            <path d="M -14,8 C -20,16 -26,26 -28,38 C -24,44 -18,44 -14,36 C -12,24 -11,14 -8,2" 
+                  fill="none" stroke="#ffffff" stroke-width="0.6" stroke-opacity="0.85" stroke-linejoin="round" />
+            <!-- 3. Medial-Cubital Crossveins & Discal Net (r-m, m-cu) -->
+            <path d="M -20,16 C -26,22 -32,32 -34,42 M -28,38 C -32,44 -36,50 -32,54 C -28,56 -24,54 -20,46 M -14,36 C -18,44 -22,50 -24,58" 
+                  fill="none" stroke="#ffffff" stroke-width="0.5" stroke-opacity="0.8" stroke-linejoin="round" />
+            <!-- 4. Vannal / Jugal Fold Vein (Anal Lobe) -->
+            <path d="M -15,34 C -16,42 -14,48 -15,52 M -20,46 C -16,50 -14,54 -15,56" 
+                  fill="none" stroke="#ffffff" stroke-width="0.4" stroke-opacity="0.7" />
+
+            <!-- ── Right Hindwing (ปีกหลังขวา - กายวิภาคปีกผึ้งแท้ กระจกเงา) ────── -->
+            <!-- Wing Membrane -->
+            <path d="M 8,2 C 18,8 32,20 40,40 C 43,50 36,60 24,58 C 16,56 13,46 15,34 C 16,22 11,10 8,2 Z" 
+                  fill="url(#hindwing-membrane)" />
+            <!-- Outer Golden Structural Rib Contour -->
+            <path d="M 8,2 C 18,8 32,20 40,40 C 43,50 36,60 24,58 C 16,56 13,46 15,34 C 16,22 11,10 8,2 Z" 
+                  fill="none" stroke="url(#gold-dark)" stroke-width="1.1" opacity="0.9" />
+
+            <!-- Row of Hamuli (แถบหนามเกาะเกี่ยวปีกสีทองตามธรรมชาติ) -->
+            <circle cx="24" cy="18" r="0.75" fill="#ffd573" />
+            <circle cx="28" cy="23" r="0.75" fill="#ffd573" />
+            <circle cx="32" cy="29" r="0.75" fill="#ffd573" />
+            <circle cx="36" cy="35" r="0.75" fill="#ffd573" />
+
+            <!-- Authentic Biological Hindwing Closed Cells & Veins -->
+            <!-- 1. Costal & Radial Vein Trunk (C+Sc+R) -->
+            <path d="M 8,2 C 18,8 32,20 40,40" fill="none" stroke="#ffffff" stroke-width="0.8" stroke-opacity="0.9" />
+            <!-- 2. Closed Basal Radial & Medial Cell (R+M Cell) -->
+            <path d="M 14,8 C 20,16 26,26 28,38 C 24,44 18,44 14,36 C 12,24 11,14 8,2" 
+                  fill="none" stroke="#ffffff" stroke-width="0.6" stroke-opacity="0.85" stroke-linejoin="round" />
+            <!-- 3. Medial-Cubital Crossveins & Discal Net (r-m, m-cu) -->
+            <path d="M 20,16 C 26,22 32,32 34,42 M 28,38 C 32,44 36,50 32,54 C 28,56 24,54 20,46 M 14,36 C 18,44 22,50 24,58" 
+                  fill="none" stroke="#ffffff" stroke-width="0.5" stroke-opacity="0.8" stroke-linejoin="round" />
+            <!-- 4. Vannal / Jugal Fold Vein (Anal Lobe) -->
+            <path d="M 15,34 C 16,42 14,48 15,52 M 20,46 C 16,50 14,54 15,56" 
+                  fill="none" stroke="#ffffff" stroke-width="0.4" stroke-opacity="0.7" />
+          </g>
+
+          <!-- ── INVISIBLE BEE INTERACTIVE HITBOX FOR TOUCH & POINTER ── -->
+          <ellipse id="bee-hitbox" cx="0" cy="12" rx="72" ry="85" fill="transparent" cursor="pointer" pointer-events="all" />
+
+          <!-- ==================================================== -->
+          <!-- LAYER 3: CAD BLUEPRINT / X-RAY VECTOR OVERLAY LAYER  -->
+          <!-- ==================================================== -->
+          <g id="blueprint-layer" class="blueprint-layer" opacity="0" pointer-events="none">
+            <!-- ── 1. Concentric Engineering Dimension Circles ── -->
+            <circle cx="0" cy="0" r="202" class="blueprint-dim-circle" />
+            <circle cx="0" cy="0" r="178" class="blueprint-dim-circle" />
+            <circle cx="0" cy="0" r="142" class="blueprint-dim-circle" />
+            <circle cx="0" cy="0" r="96" class="blueprint-dim-circle" />
+            <circle cx="0" cy="0" r="144" class="blueprint-dim-circle" />
+            <circle cx="0" cy="0" r="175" class="blueprint-dim-circle" />
+
+            <!-- ── 2. Gear Pitch Circle Diameters (PCD) ── -->
+            <circle cx="-45" cy="-45" r="44" class="blueprint-dim-circle" />
+            <circle cx="36" cy="-55" r="32.5" class="blueprint-dim-circle" />
+            <circle cx="68" cy="-8" r="21" class="blueprint-dim-circle" />
+            <circle cx="-18" cy="58" r="56" class="blueprint-dim-circle" />
+
+            <!-- ── 3. Radial Polar Angular Guidelines (Every 30°) ── -->
+            <line x1="0" y1="0" x2="0" y2="-215" class="blueprint-grid-line" />
+            <line x1="0" y1="0" x2="107.5" y2="-186.2" class="blueprint-grid-line" />
+            <line x1="0" y1="0" x2="186.2" y2="-107.5" class="blueprint-grid-line" />
+            <line x1="0" y1="0" x2="215" y2="0" class="blueprint-grid-line" />
+            <line x1="0" y1="0" x2="186.2" y2="107.5" class="blueprint-grid-line" />
+            <line x1="0" y1="0" x2="107.5" y2="186.2" class="blueprint-grid-line" />
+            <line x1="0" y1="0" x2="0" y2="215" class="blueprint-grid-line" />
+            <line x1="0" y1="0" x2="-107.5" y2="186.2" class="blueprint-grid-line" />
+            <line x1="0" y1="0" x2="-186.2" y2="107.5" class="blueprint-grid-line" />
+            <line x1="0" y1="0" x2="-215" y2="0" class="blueprint-grid-line" />
+            <line x1="0" y1="0" x2="-186.2" y2="-107.5" class="blueprint-grid-line" />
+            <line x1="0" y1="0" x2="-107.5" y2="-186.2" class="blueprint-grid-line" />
+
+            <!-- ── 4. Mathematical Origin Center Escapement Pivot ── -->
+            <circle cx="0" cy="0" r="4.5" class="blueprint-pivot" />
+            <line x1="-8" y1="0" x2="8" y2="0" stroke="#00f0ff" stroke-width="0.7" />
+            <line x1="0" y1="-8" x2="0" y2="8" stroke="#00f0ff" stroke-width="0.7" />
+            <text x="10" y="-4" class="blueprint-text">⨁ ORIGIN [0, 0]</text>
+            <text x="10" y="4" class="blueprint-label-sub">ESCAPEMENT HUB</text>
+
+            <!-- ── 5. Gear Kinematic Center Markers ── -->
+            <circle cx="-45" cy="-45" r="3.5" class="blueprint-pivot" />
+            <line x1="-50" y1="-45" x2="-40" y2="-45" stroke="#00f0ff" stroke-width="0.6" />
+            <line x1="-45" y1="-50" x2="-45" y2="-40" stroke="#00f0ff" stroke-width="0.6" />
+            <text x="-45" y="-52" text-anchor="middle" class="blueprint-text">G1 (-45,-45) Z=24</text>
+
+            <circle cx="36" cy="-55" r="3.5" class="blueprint-pivot" />
+            <line x1="31" y1="-55" x2="41" y2="-55" stroke="#00f0ff" stroke-width="0.6" />
+            <line x1="36" y1="-60" x2="36" y2="-50" stroke="#00f0ff" stroke-width="0.6" />
+            <text x="36" y="-62" text-anchor="middle" class="blueprint-text">G2 (36,-55) Z=18</text>
+
+            <circle cx="68" cy="-8" r="3.5" class="blueprint-pivot" />
+            <line x1="63" y1="-8" x2="73" y2="-8" stroke="#00f0ff" stroke-width="0.6" />
+            <line x1="68" y1="-13" x2="68" y2="-3" stroke="#00f0ff" stroke-width="0.6" />
+            <text x="75" y="-8" class="blueprint-text">G3 (68,-8) Z=12</text>
+
+            <circle cx="-18" cy="58" r="3.5" class="blueprint-pivot" />
+            <line x1="-23" y1="58" x2="-13" y2="58" stroke="#00f0ff" stroke-width="0.6" />
+            <line x1="-18" y1="53" x2="-18" y2="63" stroke="#00f0ff" stroke-width="0.6" />
+            <text x="-18" y="70" text-anchor="middle" class="blueprint-text">G4 (-18,58) Z=30</text>
+
+            <!-- ── 6. Leg Anchor GSAP Pivot Markers ── -->
+            <circle cx="-3.5" cy="-4.9" r="1.5" fill="#00f0ff" />
+            <circle cx="3.5" cy="-4.9" r="1.5" fill="#00f0ff" />
+            <circle cx="-3.5" cy="8.4" r="1.5" fill="#00f0ff" />
+            <circle cx="3.5" cy="8.4" r="1.5" fill="#00f0ff" />
+            <text x="-120" y="-12" class="blueprint-label-sub">LEG_I PIVOT: (-5,-7)</text>
+            <text x="-120" y="24" class="blueprint-label-sub">LEG_III PIVOT: (-5,12)</text>
+
+            <!-- ── 7. Technical CAD Specification Telemetry ── -->
+            <!-- Top Left -->
+            <text x="-215" y="-196" class="blueprint-text">SYS://VECTOR_CAD_SPEC</text>
+            <text x="-215" y="-186" class="blueprint-label-sub">CALIBRE: APIS ROYALE</text>
+            <text x="-215" y="-177" class="blueprint-label-sub">CLOCKWORK: MONOTONIC GSAP</text>
+            <text x="-215" y="-168" class="blueprint-label-sub">GEOMETRY: PARAMETRIC SVG</text>
+
+            <!-- Top Right -->
+            <text x="215" y="-196" text-anchor="end" class="blueprint-text">MATHEMATICAL KINEMATICS</text>
+            <text x="215" y="-186" text-anchor="end" class="blueprint-label-sub">θ_sec = s · 6° (Δ=0.35s)</text>
+            <text x="215" y="-177" text-anchor="end" class="blueprint-label-sub">θ_min = (m + s/60) · 6°</text>
+            <text x="215" y="-168" text-anchor="end" class="blueprint-label-sub">θ_hr  = (h + m/60) · 30°</text>
+
+            <!-- Bottom Left -->
+            <text x="-215" y="176" class="blueprint-text">MORPHOLOGY: QUEEN BEE</text>
+            <text x="-215" y="186" class="blueprint-label-sub">SPECIES: APIS MELLIFERA</text>
+            <text x="-215" y="196" class="blueprint-label-sub">HAMULI HOOKS: 4-CLUSTER</text>
+            <text x="-215" y="206" class="blueprint-label-sub">RADIAL CELLS: CLOSED R+M</text>
+
+            <!-- Bottom Right -->
+            <text x="215" y="176" text-anchor="end" class="blueprint-text">ESCAPEMENT: SWISS LEVER</text>
+            <text x="215" y="186" text-anchor="end" class="blueprint-label-sub">GEAR RATIO: 1:1.33:2:2.5</text>
+            <text x="215" y="196" text-anchor="end" class="blueprint-label-sub">BEAT FREQ: 28,800 A/h</text>
+            <text x="215" y="206" text-anchor="end" class="blueprint-label-sub">STATUS: OPERATIONAL</text>
+          </g>
+
+        </svg>
+      </div>
+
+      <!-- Haute Horlogerie Configurator & Blueprint Control Bar -->
+      <nav class="horology-toolbar" aria-label="Timepiece Configurator">
+        <!-- Theme Selectors -->
+        <div class="theme-selector-group">
+          <button class="theme-pill active" data-theme="classic-gold" title="Classic Honey Gold">
+            <span class="pill-swatch gold-swatch"></span>
+            <span class="pill-label">Honey Gold</span>
+          </button>
+          <button class="theme-pill" data-theme="obsidian-platinum" title="Obsidian Platinum">
+            <span class="pill-swatch platinum-swatch"></span>
+            <span class="pill-label">Platinum</span>
+          </button>
+        </div>
+
+        <span class="toolbar-divider" aria-hidden="true"></span>
+
+        <!-- Real-Time Live Sync -->
+        <button id="livesync-btn" class="time-control-btn live-active" title="Reset to Real-Time Clock (Key: L)" aria-label="Live Sync">
+          <span class="live-pulse-dot"></span>
+          <span class="btn-label">LIVE SYNC</span>
+        </button>
+
+        <span class="toolbar-divider" aria-hidden="true"></span>
+
+        <!-- X-Ray Blueprint Toggle -->
+        <button id="blueprint-toggle" class="blueprint-btn" title="Toggle CAD X-Ray Blueprint Mode (Key: X)" aria-label="Toggle Blueprint Mode">
+          <span class="blueprint-icon">📐</span>
+          <span class="blueprint-text">X-RAY</span>
+        </button>
+      </nav>
+
+      <!-- Time Readout & Horology Badges -->
+      <footer class="clock-footer">
+        <time id="readout" class="readout-time">00:00:00</time>
+        <div id="readout-date" class="readout-date">SUNDAY, 30 AUGUST 2026</div>
+        <div class="readout-badges">
+          <span>APIS ROYALE</span>
+          <span class="badge-dot">•</span>
+          <span>PERPETUAL CALIBRE</span>
+          <span class="badge-dot">•</span>
+          <span>MOONPHASE 29½D</span>
+        </div>
+      </footer>
+    </main>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
