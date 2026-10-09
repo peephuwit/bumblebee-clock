@@ -749,16 +749,90 @@ body {
 }
 
 @media (max-width: 520px) {
-  .dial-container {
-    max-width: 320px;
+  body {
+    padding: 0.5rem;
+    align-items: flex-start;
   }
+
+  .window-header {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .window-title .tech-tag,
+  .window-title .separator {
+    display: none;
+  }
+
+  #sound-label {
+    display: none;
+  }
+
+  .sound-btn {
+    padding: 0 8px;
+  }
+
+  .clock-stage {
+    padding: 1.25rem 0.75rem 1.25rem 0.75rem;
+  }
+
+  .brand-title {
+    font-size: 0.95rem;
+    letter-spacing: 0.3em;
+  }
+
+  .brand-sub {
+    font-size: 0.5rem;
+    letter-spacing: 0.16em;
+  }
+
+  .dial-container {
+    max-width: 290px;
+  }
+
   .horology-toolbar {
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px;
-    padding: 8px;
+    gap: 6px;
+    padding: 6px;
+    max-width: 100%;
   }
+
   .theme-selector-group {
     justify-content: center;
+    gap: 4px;
+  }
+
+  .theme-pill,
+  .time-control-btn,
+  .blueprint-btn {
+    padding: 0 7px;
+    font-size: 0.62rem;
+  }
+
+  .readout-time {
+    font-size: 1rem;
+    letter-spacing: 0.18em;
+  }
+
+  .readout-date {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+  }
+
+  .readout-badges {
+    flex-wrap: wrap;
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+    gap: 0.35rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .dial-container {
+    max-width: 250px;
+  }
+
+  .toolbar-divider {
+    display: none;
   }
 }
