@@ -814,10 +814,16 @@ function scheduleTick() {
     }
   }
 
-  // Pointer Proximity & Direct Hover Listeners
+  // Pointer Proximity & Direct Hover / Touch Listeners
   if (beeHitbox) {
     beeHitbox.addEventListener('pointerenter', () => {
       triggerBeeReaction(false);
+    });
+
+    beeHitbox.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      initAudio();
+      triggerBeeReaction(true);
     });
 
     beeHitbox.addEventListener('click', (e) => {
@@ -826,7 +832,7 @@ function scheduleTick() {
     });
   }
 
-  // Proximity Tracking over Dial Container
+  // Proximity & Touch Tracking over Dial Container
   const dialStage = document.querySelector('.dial-container');
   if (dialStage) {
     dialStage.addEventListener('pointermove', (e) => {
@@ -837,6 +843,18 @@ function scheduleTick() {
 
       if (dist < 88) {
         triggerBeeReaction(false);
+      }
+    });
+
+    dialStage.addEventListener('pointerdown', (e) => {
+      const rect = dialStage.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+
+      if (dist < 88) {
+        initAudio();
+        triggerBeeReaction(true);
       }
     });
   }
