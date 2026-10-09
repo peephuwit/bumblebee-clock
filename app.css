@@ -748,23 +748,15 @@ body {
   color: rgba(148, 163, 184, 0.75);
 }
 
-/* Hardware Acceleration & Smooth Motion */
-.dial-container,
-.clock-svg,
-.hand-group,
-#sec,
-#min,
-#hour,
-.skeleton-gear,
-#gear-honeycomb,
-#gear-mesh,
-#gear-small,
-#gear-giant,
-#balance-wheel,
-#balance-hairspring,
-#escapement-lever {
+/* Hardware Acceleration & Smooth Motion for HTML Container */
+.dial-container {
   will-change: transform;
   transform: translateZ(0);
+}
+
+.hand-group,
+.skeleton-gear {
+  will-change: transform;
 }
 
 @media (max-width: 520px) {
